@@ -1,0 +1,11 @@
+C:\Users\yanceych\source\repos\CovertFuhrerClient\CovertFuhrerClient\bin\Debug\netcoreapp2.0\CovertFuhrerClient.deps.json
+C:\Users\yanceych\source\repos\CovertFuhrerClient\CovertFuhrerClient\bin\Debug\netcoreapp2.0\CovertFuhrerClient.runtimeconfig.json
+C:\Users\yanceych\source\repos\CovertFuhrerClient\CovertFuhrerClient\bin\Debug\netcoreapp2.0\CovertFuhrerClient.runtimeconfig.dev.json
+C:\Users\yanceych\source\repos\CovertFuhrerClient\CovertFuhrerClient\bin\Debug\netcoreapp2.0\CovertFuhrerClient.dll
+C:\Users\yanceych\source\repos\CovertFuhrerClient\CovertFuhrerClient\bin\Debug\netcoreapp2.0\CovertFuhrerClient.pdb
+C:\Users\yanceych\source\repos\CovertFuhrerClient\CovertFuhrerClient\obj\Debug\netcoreapp2.0\CovertFuhrerClient.csprojAssemblyReference.cache
+C:\Users\yanceych\source\repos\CovertFuhrerClient\CovertFuhrerClient\obj\Debug\netcoreapp2.0\CovertFuhrerClient.csproj.CoreCompileInputs.cache
+C:\Users\yanceych\source\repos\CovertFuhrerClient\CovertFuhrerClient\obj\Debug\netcoreapp2.0\CovertFuhrerClient.AssemblyInfoInputs.cache
+C:\Users\yanceych\source\repos\CovertFuhrerClient\CovertFuhrerClient\obj\Debug\netcoreapp2.0\CovertFuhrerClient.AssemblyInfo.cs
+C:\Users\yanceych\source\repos\CovertFuhrerClient\CovertFuhrerClient\obj\Debug\netcoreapp2.0\CovertFuhrerClient.dll
+C:\Users\yanceych\source\repos\CovertFuhrerClient\CovertFuhrerClient\obj\Debug\netcoreapp2.0\CovertFuhrerClient.pdb

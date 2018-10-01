@@ -1,0 +1,38 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v2.0",
+    "signature": "397d43a0a8abeeda5e18a79497ca0068c550e891"
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v2.0": {
+      "CovertFuhrerClient/1.0.0": {
+        "dependencies": {
+          "Ether.Network": "3.0.0"
+        },
+        "runtime": {
+          "CovertFuhrerClient.dll": {}
+        }
+      },
+      "Ether.Network/3.0.0": {
+        "runtime": {
+          "lib/netstandard2.0/Ether.Network.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "CovertFuhrerClient/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Ether.Network/3.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-GdvdWe44NooiW4Ir6NrAbLF1kN7p5XOnWMSc4Dr8y8K1MF7sUFydR90p5uwHJQDNy9KOEpKEHK9/x6LhsPgFIw==",
+      "path": "ether.network/3.0.0",
+      "hashPath": "ether.network.3.0.0.nupkg.sha512"
+    }
+  }
+}
