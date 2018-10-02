@@ -4,8 +4,8 @@ using System.Text;
 
 namespace CovertFuhrerServer
 {
-    class PlayerObject
+    enum Policy
     {
-
+        Liberal, Facist
     }
 }

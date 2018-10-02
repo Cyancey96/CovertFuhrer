@@ -697,11 +697,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\yanceych\\source\\repos\\CovertFuhrerClient\\CovertFuhrerClient\\CovertFuhrerClient.csproj",
+      "projectUniqueName": "C:\\Users\\yanceych\\source\\repos\\CovertFuhrer\\CovertFuhrerClient\\CovertFuhrerClient\\CovertFuhrerClient.csproj",
       "projectName": "CovertFuhrerClient",
-      "projectPath": "C:\\Users\\yanceych\\source\\repos\\CovertFuhrerClient\\CovertFuhrerClient\\CovertFuhrerClient.csproj",
+      "projectPath": "C:\\Users\\yanceych\\source\\repos\\CovertFuhrer\\CovertFuhrerClient\\CovertFuhrerClient\\CovertFuhrerClient.csproj",
       "packagesPath": "C:\\Users\\yanceych\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\yanceych\\source\\repos\\CovertFuhrerClient\\CovertFuhrerClient\\obj\\",
+      "outputPath": "C:\\Users\\yanceych\\source\\repos\\CovertFuhrer\\CovertFuhrerClient\\CovertFuhrerClient\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"

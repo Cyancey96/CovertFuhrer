@@ -4,8 +4,8 @@ using System.Text;
 
 namespace CovertFuhrerServer
 {
-    class PlayerObject
+    enum Role
     {
-
+        Liberal, Facist, Fuhrer
     }
 }

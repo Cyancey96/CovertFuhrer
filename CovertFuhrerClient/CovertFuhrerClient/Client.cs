@@ -27,7 +27,7 @@ namespace CovertFuhrerClient
         public override void HandleMessage(INetPacketStream packet)
         {
             var response = packet.Read<string>();
-            Console.WriteLine($"->{response}");
+            Console.WriteLine($"{response}");
         }
 
         /// <summary>
