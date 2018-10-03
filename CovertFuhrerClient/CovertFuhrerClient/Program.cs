@@ -11,7 +11,10 @@ namespace CovertFuhrerClient
         private static void Main()
         {
             Console.Title = "Covert Fuhrer";
+            Console.WriteLine("Enter your name:");
+            playerName = Console.ReadLine();
             var client = new Client("127.0.0.1", 4444, 512);
+            Console.WriteLine("Connecting...");
             client.Connect();
 
             if (!client.IsConnected)
@@ -20,8 +23,6 @@ namespace CovertFuhrerClient
                 Console.ReadLine();
                 return;
             }
-            Console.WriteLine("Enter your name:");
-            playerName = Console.ReadLine();
             try
             {
                 using (var packet = new NetPacket())
