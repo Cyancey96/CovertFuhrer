@@ -1,11 +1,14 @@
 ﻿using Ether.Network.Common;
 using Ether.Network.Packets;
 using System;
+using System.Collections.Generic;
 
 namespace CovertFuhrerServer
 {
     internal sealed class Client : NetUser
     {
+        public static Game game { get; set; }
+        public static List<Client> clients { get; set; }
         public bool isPlayerNamed { get; set; }
         public PlayerObject player { get; set; }
         /// <summary>
@@ -28,21 +31,30 @@ namespace CovertFuhrerServer
         public override void HandleMessage(INetPacketStream packet)
         {
             var value = packet.Read<string>();
+            //First time this client connects only.  Assigns names to players.
             if (!isPlayerNamed)
             {
                 player = new PlayerObject(value);
                 isPlayerNamed = true;
                 SendFirstPacket();
+                //If we have enough players to start the game, we do.
+                if (clients.Count == 5)
+                {
+                    game = new Game(clients);
+                    game.start();
+                }
             }
+            //Handle commands sent from player
             else
             {
-                Console.WriteLine("Received '{1}' from {0}", Id, value);
+
+                /*Console.WriteLine("Received '{1}' from {0}", Id, value);
 
                 using (var p = new NetPacket())
                 {
                     p.Write(string.Format("OK: '{0}'", value));
                     Server.SendToAll(p);
-                }
+                }*/
             }
         }
     }

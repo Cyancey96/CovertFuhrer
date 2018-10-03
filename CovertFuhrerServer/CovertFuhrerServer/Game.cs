@@ -14,7 +14,11 @@ namespace CovertFuhrerServer
 
         public void start()
         {
-            Console.WriteLine("Game HAS started");
+            Console.WriteLine("Game has started with the following players:");
+            foreach (var client in clients)
+            {
+                Console.WriteLine(client.player.name);
+            }
         }
     }
 }

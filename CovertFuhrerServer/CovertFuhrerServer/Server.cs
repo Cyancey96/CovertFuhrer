@@ -9,7 +9,6 @@ namespace CovertFuhrerServer
     internal sealed class Server : NetServer<Client>
     {
         private List<Client> clients;
-        private Game game;
         /// <summary>
         /// Creates a new <see cref="Server"/> with a default configuration.
         /// </summary>
@@ -27,7 +26,7 @@ namespace CovertFuhrerServer
         /// <summary>
         /// Initialize the server resources if needed...
         /// </summary>
-        protected async override void Initialize()
+        protected override void Initialize()
         {
             Console.WriteLine("Server is ready.\nAwaiting Players...");
         }
@@ -40,6 +39,7 @@ namespace CovertFuhrerServer
         {
             Console.WriteLine("New client connected: " + connection.Id);
             clients.Add(connection);
+            Client.clients = clients;
         }
 
         /// <summary>
@@ -50,6 +50,7 @@ namespace CovertFuhrerServer
         {
             Console.WriteLine("Client disconnected: " + connection.Id);
             clients.Remove(connection);
+            Client.clients = clients;
         }
 
         /// <summary>
@@ -59,11 +60,6 @@ namespace CovertFuhrerServer
         protected override void OnError(Exception exception)
         {
             // TBA
-        }
-
-        protected Task checkNames()
-        {
-
         }
     }
 }
