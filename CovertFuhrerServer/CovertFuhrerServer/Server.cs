@@ -2,12 +2,14 @@
 using Ether.Network.Server;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace CovertFuhrerServer
 {
     internal sealed class Server : NetServer<Client>
     {
-        private Dictionary<Guid, PlayerObject> players;
+        private List<Client> clients;
+        private Game game;
         /// <summary>
         /// Creates a new <see cref="Server"/> with a default configuration.
         /// </summary>
@@ -15,19 +17,19 @@ namespace CovertFuhrerServer
         {
             Configuration.Backlog = 100;
             Configuration.Port = 4444;
-            Configuration.MaximumNumberOfConnections = 100;
+            Configuration.MaximumNumberOfConnections = 5;
             Configuration.Host = "127.0.0.1";
             Configuration.BufferSize = 8;
             Configuration.Blocking = true;
-            players = new Dictionary<Guid, PlayerObject>();
+            clients = new List<Client>();
         }
 
         /// <summary>
         /// Initialize the server resources if needed...
         /// </summary>
-        protected override void Initialize()
+        protected async override void Initialize()
         {
-            Console.WriteLine("Server is ready.");
+            Console.WriteLine("Server is ready.\nAwaiting Players...");
         }
 
         /// <summary>
@@ -37,7 +39,7 @@ namespace CovertFuhrerServer
         protected override void OnClientConnected(Client connection)
         {
             Console.WriteLine("New client connected: " + connection.Id);
-            players.Add(connection.Id, new PlayerObject());
+            clients.Add(connection);
         }
 
         /// <summary>
@@ -47,7 +49,7 @@ namespace CovertFuhrerServer
         protected override void OnClientDisconnected(Client connection)
         {
             Console.WriteLine("Client disconnected: " + connection.Id);
-            players.Remove(connection.Id);
+            clients.Remove(connection);
         }
 
         /// <summary>
@@ -57,6 +59,11 @@ namespace CovertFuhrerServer
         protected override void OnError(Exception exception)
         {
             // TBA
+        }
+
+        protected Task checkNames()
+        {
+
         }
     }
 }

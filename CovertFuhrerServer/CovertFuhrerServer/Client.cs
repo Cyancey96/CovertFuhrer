@@ -6,8 +6,8 @@ namespace CovertFuhrerServer
 {
     internal sealed class Client : NetUser
     {
-        private string _playerName;
-        private bool _isPlayerNamed;
+        public bool isPlayerNamed { get; set; }
+        public PlayerObject player { get; set; }
         /// <summary>
         /// Send hello to the incoming clients.
         /// </summary>
@@ -15,7 +15,7 @@ namespace CovertFuhrerServer
         {
             using (var packet = new NetPacket())
             {
-                packet.Write("Welcome " + _playerName + "!");
+                packet.Write("Welcome " + player.name + "!");
 
                 Send(packet);
             }
@@ -28,10 +28,10 @@ namespace CovertFuhrerServer
         public override void HandleMessage(INetPacketStream packet)
         {
             var value = packet.Read<string>();
-            if (!_isPlayerNamed)
+            if (!isPlayerNamed)
             {
-                _playerName = value;
-                _isPlayerNamed = true;
+                player = new PlayerObject(value);
+                isPlayerNamed = true;
                 SendFirstPacket();
             }
             else
