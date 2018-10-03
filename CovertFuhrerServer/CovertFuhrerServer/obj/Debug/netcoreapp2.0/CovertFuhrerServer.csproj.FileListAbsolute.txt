@@ -9,3 +9,14 @@ C:\Users\yanceych\source\repos\CovertFuhrerServer\CovertFuhrerServer\obj\Debug\n
 C:\Users\yanceych\source\repos\CovertFuhrerServer\CovertFuhrerServer\obj\Debug\netcoreapp2.0\CovertFuhrerServer.AssemblyInfo.cs
 C:\Users\yanceych\source\repos\CovertFuhrerServer\CovertFuhrerServer\obj\Debug\netcoreapp2.0\CovertFuhrerServer.dll
 C:\Users\yanceych\source\repos\CovertFuhrerServer\CovertFuhrerServer\obj\Debug\netcoreapp2.0\CovertFuhrerServer.pdb
+C:\Users\yanceych\source\repos\CovertFuhrer\CovertFuhrerServer\CovertFuhrerServer\bin\Debug\netcoreapp2.0\CovertFuhrerServer.deps.json
+C:\Users\yanceych\source\repos\CovertFuhrer\CovertFuhrerServer\CovertFuhrerServer\bin\Debug\netcoreapp2.0\CovertFuhrerServer.runtimeconfig.json
+C:\Users\yanceych\source\repos\CovertFuhrer\CovertFuhrerServer\CovertFuhrerServer\bin\Debug\netcoreapp2.0\CovertFuhrerServer.runtimeconfig.dev.json
+C:\Users\yanceych\source\repos\CovertFuhrer\CovertFuhrerServer\CovertFuhrerServer\bin\Debug\netcoreapp2.0\CovertFuhrerServer.dll
+C:\Users\yanceych\source\repos\CovertFuhrer\CovertFuhrerServer\CovertFuhrerServer\bin\Debug\netcoreapp2.0\CovertFuhrerServer.pdb
+C:\Users\yanceych\source\repos\CovertFuhrer\CovertFuhrerServer\CovertFuhrerServer\obj\Debug\netcoreapp2.0\CovertFuhrerServer.csprojAssemblyReference.cache
+C:\Users\yanceych\source\repos\CovertFuhrer\CovertFuhrerServer\CovertFuhrerServer\obj\Debug\netcoreapp2.0\CovertFuhrerServer.csproj.CoreCompileInputs.cache
+C:\Users\yanceych\source\repos\CovertFuhrer\CovertFuhrerServer\CovertFuhrerServer\obj\Debug\netcoreapp2.0\CovertFuhrerServer.AssemblyInfoInputs.cache
+C:\Users\yanceych\source\repos\CovertFuhrer\CovertFuhrerServer\CovertFuhrerServer\obj\Debug\netcoreapp2.0\CovertFuhrerServer.AssemblyInfo.cs
+C:\Users\yanceych\source\repos\CovertFuhrer\CovertFuhrerServer\CovertFuhrerServer\obj\Debug\netcoreapp2.0\CovertFuhrerServer.dll
+C:\Users\yanceych\source\repos\CovertFuhrer\CovertFuhrerServer\CovertFuhrerServer\obj\Debug\netcoreapp2.0\CovertFuhrerServer.pdb

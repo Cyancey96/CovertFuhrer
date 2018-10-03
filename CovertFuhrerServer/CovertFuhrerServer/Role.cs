@@ -4,7 +4,7 @@ using System.Text;
 
 namespace CovertFuhrerServer
 {
-    enum Role
+    public enum Role
     {
         Liberal, Facist, Fuhrer
     }
