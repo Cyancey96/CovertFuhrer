@@ -13,7 +13,7 @@ namespace CovertFuhrerServer
 
         public static string gameStart()
         {
-            return "Game has started!";
+            return "Game has started!  Type \"players\" at any time to see the names of other players.";
         }
 
         public static string assignRole(Role role)
@@ -38,9 +38,24 @@ namespace CovertFuhrerServer
             return "" + player.name + " has become President.";
         }
 
+        public static string presidentInstructionsNominate()
+        {
+            return "Nominate a chancellor by typing \"nominate <player>\"";
+        }
+
+        public static string presidentInstructionsDiscard(Policy p1, Policy p2, Policy p3)
+        {
+            return $"Discard a policy by typing \"discard <policy number>\".\nAvailable policies:\n1. {p1}\n2. {p2}\n3. {p3}";
+        }
+
         public static string nominateChancellor(PlayerObject president, PlayerObject chancellor)
         {
-            return "" + president.name + "has nominated " + chancellor.name + " to be chancellor.\nVote now! (Y/N)";
+            return "" + president.name + "has nominated " + chancellor.name + " to be chancellor.\nVote by typing \"vote yes\" or \"vote no\".";
+        }
+
+        public static string chancellorInstructions(Policy p1, Policy p2)
+        {
+            return $"Pick a policy by typing \"pick <policy number>\".\nAvailable policies:\n1. {p1}\n2. {p2}";
         }
 
         public static string voteRecieved()
@@ -116,6 +131,21 @@ namespace CovertFuhrerServer
         public static string executePlayerAfter(PlayerObject president, PlayerObject victim)
         {
             return "" + president.name + " has executed " + victim.name + ".";
+        }
+
+        public static string executeInstructions()
+        {
+            return "Kill a player by typing \"kill <player>\"";
+        }
+
+        public static string investigateInstructions()
+        {
+            return "Investigate a player by typing \"investigate <player>\"";
+        }
+
+        public static string electInstructions()
+        {
+            return "Elect the next president by typing \"elect <player>\"";
         }
     }
 }

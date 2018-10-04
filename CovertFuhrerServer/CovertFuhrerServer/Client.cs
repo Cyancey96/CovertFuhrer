@@ -24,6 +24,28 @@ namespace CovertFuhrerServer
             }
         }
 
+        public void SendMessage(string message)
+        {
+            using (var packet = new NetPacket())
+            {
+                packet.Write(message);
+
+                Send(packet);
+            }
+        }
+
+        public static void SendMessageToAllClients(string message)
+        {
+            using (var packet = new NetPacket())
+            {
+                packet.Write(message);
+                foreach (var client in clients)
+                {
+                    client.Send(packet);
+                }
+            }
+        }
+
         /// <summary>
         /// Receive messages from the client.
         /// </summary>
@@ -47,15 +69,119 @@ namespace CovertFuhrerServer
             //Handle commands sent from player
             else
             {
-
-                /*Console.WriteLine("Received '{1}' from {0}", Id, value);
-
-                using (var p = new NetPacket())
+                //List players in game
+                if (value.ToLower().Equals("players"))
                 {
-                    p.Write(string.Format("OK: '{0}'", value));
-                    Server.SendToAll(p);
-                }*/
+                    string message = "Players:";
+                    foreach (var client in clients)
+                    {
+                        message += "\n" + client.player.name;
+                    }
+                    SendMessage(message);
+                }
+                //Others
+                else if (value.Contains(" "))
+                {
+                    String[] tokens = value.Split(" ");
+                    int playerIndex = handleSecondToken(tokens[1]);
+                    int thisPlayerIndex = getThisPlayerIndex();
+                    if (playerIndex == -1 || thisPlayerIndex == -1)
+                    {
+                        //do nothing
+                        Console.WriteLine("DO NOTHING");
+                    }
+                    else if (playerIndex == -2)
+                    {
+                        //vote(thisPlayerIndex, true);
+                        Console.WriteLine("VOTE YES");
+                    }
+                    else if (playerIndex == -3)
+                    {
+                        //vote(thisPlayerIndex, false);
+                        Console.WriteLine("VOTE NO");
+                    }
+                    else if (playerIndex == -4)
+                    {
+                        if (tokens[0].ToLower().Equals("discard"))
+                        {
+                            //discard(thisPlayerIndex, tokens[1]);
+                            Console.WriteLine($"DISCARD {tokens[1]}");
+                        }
+                        else if (tokens[0].ToLower().Equals("pick"))
+                        {
+                            if (Int32.Parse(tokens[1]) < 3)
+                            {
+                                //pick(thisPlayerIndex, tokens[1])
+                                Console.WriteLine($"PICK {tokens[1]}");
+                            }
+                            else
+                            {
+                                //DO NOTHING
+                                Console.WriteLine("DO NOTHING");
+                            }
+                        }
+                    }
+                    else if (tokens[0].ToLower().Equals("kill"))
+                    {
+                        //kill(thisPlayerIndex, playerIndex);
+                        Console.WriteLine($"KILL {playerIndex}");
+                    }
+                    else if (tokens[0].ToLower().Equals("nominate"))
+                    {
+                        //nominateChancellor(thisPlayerIndex, playerIndex);
+                        Console.WriteLine($"NOMINATE {playerIndex}");
+                    }
+                    else if (tokens[0].ToLower().Equals("investigate"))
+                    {
+                        //investigate(thisPlayerIndex, playerIndex);
+                        Console.WriteLine($"INVESTIGATE {playerIndex}");
+                    }
+                    else if (tokens[0].ToLower().Equals("elect"))
+                    {
+                        //electPresident(thisPlayerIndex, playerIndex);
+                        Console.WriteLine($"ELECT {playerIndex}");
+                    }
+                }
             }
+        }
+
+        private int handleSecondToken(string name)
+        {
+            for (int i = 0; i < clients.Count; i++)
+            {
+                if (clients[i].player.name.ToLower().Equals(name.ToLower()))
+                {
+                    return i;
+                }
+                else if (name.ToLower().Equals("yes"))
+                {
+                    return -2;
+                }
+                else if (name.ToLower().Equals("no"))
+                {
+                    return -3;
+                }
+                else if (Int32.TryParse(name, out int cardNumber))
+                {
+                    if (cardNumber <= 3 && cardNumber >= 1)
+                    {
+                        return -4;
+                    }
+                }
+            }
+            return -1;
+        }
+
+        public int getThisPlayerIndex()
+        {
+            for (int i = 0; i < clients.Count; i++)
+            {
+                if (clients[i].player.name.ToLower().Equals(player.name.ToLower()))
+                {
+                    return i;
+                }
+            }
+            return -1;
         }
     }
 }
