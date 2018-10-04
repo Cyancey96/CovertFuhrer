@@ -49,8 +49,6 @@ namespace CovertFuhrerServer
         protected override void OnClientDisconnected(Client connection)
         {
             Console.WriteLine("Client disconnected: " + connection.Id);
-            clients.Remove(connection);
-            Client.clients = clients;
         }
 
         /// <summary>
