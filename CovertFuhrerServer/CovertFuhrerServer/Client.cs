@@ -24,6 +24,28 @@ namespace CovertFuhrerServer
             }
         }
 
+        public void SendMessage(string message)
+        {
+            using (var packet = new NetPacket())
+            {
+                packet.Write(message);
+
+                Send(packet);
+            }
+        }
+
+        public static void SendMessageToAllClients(string message)
+        {
+            using (var packet = new NetPacket())
+            {
+                packet.Write(message);
+                foreach (var client in clients)
+                {
+                    client.Send(packet);
+                }
+            }
+        }
+
         /// <summary>
         /// Receive messages from the client.
         /// </summary>
@@ -47,7 +69,18 @@ namespace CovertFuhrerServer
             //Handle commands sent from player
             else
             {
-                if (value.Contains(" "))
+                //List players in game
+                if (value.ToLower().Equals("players"))
+                {
+                    string message = "Players:";
+                    foreach (var client in clients)
+                    {
+                        message += "\n" + client.player.name;
+                    }
+                    SendMessage(message);
+                }
+                //Others
+                else if (value.Contains(" "))
                 {
                     String[] tokens = value.Split(" ");
                     int playerIndex = handleSecondToken(tokens[1]);
@@ -143,7 +176,7 @@ namespace CovertFuhrerServer
         {
             for (int i = 0; i < clients.Count; i++)
             {
-                if (clients[i].player.name.ToLower().Equals(this.player.name.ToLower()))
+                if (clients[i].player.name.ToLower().Equals(player.name.ToLower()))
                 {
                     return i;
                 }
