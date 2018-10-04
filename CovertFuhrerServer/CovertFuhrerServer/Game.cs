@@ -7,6 +7,9 @@ namespace CovertFuhrerServer
     class Game
     {
         private List<Client> clients;
+
+        private int index;
+
         public Game(List<Client> clients)
         {
             this.clients = clients;
@@ -19,6 +22,11 @@ namespace CovertFuhrerServer
             {
                 Console.WriteLine(client.player.name);
             }
+        }
+
+        private PlayerObject pickRandomPresident(List<Client> clients)
+        {
+            return PlayerObject 
         }
     }
 }
