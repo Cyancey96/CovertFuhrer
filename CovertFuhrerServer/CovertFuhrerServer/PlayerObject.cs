@@ -10,15 +10,21 @@ namespace CovertFuhrerServer
 
         public Role role { get; set; }
 
+        public bool hasVoted { get; set; }
+
+        public bool isAlive { get; set; }
+
         public PlayerObject(string playerName)
         {
             name = playerName;
+            hasVoted = false;
         }
 
         public PlayerObject(string playerName, Role playerRole)
         {
             name = playerName;
             role = playerRole;
+            hasVoted = false;
         }
     }
 }

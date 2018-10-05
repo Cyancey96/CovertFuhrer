@@ -92,19 +92,19 @@ namespace CovertFuhrerServer
                     }
                     else if (playerIndex == -2)
                     {
-                        //vote(thisPlayerIndex, true);
+                        game.vote(thisPlayerIndex, true);
                         Console.WriteLine("VOTE YES");
                     }
                     else if (playerIndex == -3)
                     {
-                        //vote(thisPlayerIndex, false);
+                        game.vote(thisPlayerIndex, false);
                         Console.WriteLine("VOTE NO");
                     }
                     else if (playerIndex == -4)
                     {
                         if (tokens[0].ToLower().Equals("discard"))
                         {
-                            //discard(thisPlayerIndex, tokens[1]);
+                            game.discardPolicy(thisPlayerIndex, Int32.Parse(tokens[1]));
                             Console.WriteLine($"DISCARD {tokens[1]}");
                         }
                         else if (tokens[0].ToLower().Equals("pick"))
