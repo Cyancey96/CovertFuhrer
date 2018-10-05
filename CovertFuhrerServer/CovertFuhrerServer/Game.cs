@@ -82,12 +82,14 @@ namespace CovertFuhrerServer
                 {
                     totalVotes++;
                     yesVotes++;
+                    clients[playerIndex].player.hasVoted = true;
                     Client.SendMessageToAllClients(Message.voteRecieved(clients[playerIndex].player, true));
                 }
                 else
                 {
                     totalVotes++;
                     noVotes++;
+                    clients[playerIndex].player.hasVoted = true;
                     Client.SendMessageToAllClients(Message.voteRecieved(clients[playerIndex].player, false));
                 }
                 if (totalVotes == clients.Count)
@@ -108,6 +110,10 @@ namespace CovertFuhrerServer
                     totalVotes = 0;
                     yesVotes = 0;
                     noVotes = 0;
+                    foreach (var client in clients)
+                    {
+                        client.player.hasVoted = false;
+                    }
                 }
             }
         }

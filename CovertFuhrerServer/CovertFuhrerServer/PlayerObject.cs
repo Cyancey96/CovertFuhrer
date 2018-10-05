@@ -12,6 +12,8 @@ namespace CovertFuhrerServer
 
         public bool hasVoted { get; set; }
 
+        public bool isAlive { get; set; }
+
         public PlayerObject(string playerName)
         {
             name = playerName;
