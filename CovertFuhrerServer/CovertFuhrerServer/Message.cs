@@ -58,9 +58,16 @@ namespace CovertFuhrerServer
             return $"Pick a policy by typing \"pick <policy number>\".\nAvailable policies:\n1. {p1}\n2. {p2}";
         }
 
-        public static string voteRecieved()
+        public static string voteRecieved(PlayerObject player, bool vote)
         {
-            return "Vote recieved!";
+            if (vote)
+            {
+                return $"{player.name} has voted YES.";
+            }
+            else
+            {
+                return $"{player.name} has voted NO.";
+            }
         }
 
         public static string votePassed(PlayerObject chancellor)
@@ -146,6 +153,11 @@ namespace CovertFuhrerServer
         public static string electInstructions()
         {
             return "Elect the next president by typing \"elect <player>\"";
+        }
+
+        public static string presidentNominate(PlayerObject president)
+        {
+            return $"{president.name} is nominating a chancellor.";
         }
     }
 }
