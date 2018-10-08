@@ -10,10 +10,11 @@ namespace CovertFuhrerClient
         private static string playerName;
         private static void Main()
         {
+            string[] lines = System.IO.File.ReadAllLines("config.txt");
             Console.Title = "Covert Fuhrer";
             Console.WriteLine("Enter your name:");
             playerName = Console.ReadLine();
-            var client = new Client("127.0.0.1", 4444, 512);
+            var client = new Client(lines[0], Int32.Parse(lines[1]), 512);
             Console.WriteLine("Connecting...");
             client.Connect();
 
