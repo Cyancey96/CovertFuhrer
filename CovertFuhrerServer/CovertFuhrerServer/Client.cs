@@ -80,12 +80,16 @@ namespace CovertFuhrerServer
                     SendMessage(message);
                 }
                 //Others
-                else if (value.Contains(" "))
+                else if (value.Contains(" ") && player.isAlive)
                 {
                     String[] tokens = value.Split(" ");
                     int playerIndex = handleSecondToken(tokens[1]);
                     int thisPlayerIndex = getThisPlayerIndex();
-                    if (playerIndex == -1 || thisPlayerIndex == -1)
+                    if (!clients[playerIndex].player.isAlive)
+                    {
+                        SendMessage("The selected player is dead.  Please choose a different player.");
+                    }
+                    else if (playerIndex == -1 || thisPlayerIndex == -1)
                     {
                         //do nothing
                         Console.WriteLine("DO NOTHING");
@@ -138,7 +142,7 @@ namespace CovertFuhrerServer
                     }
                     else if (tokens[0].ToLower().Equals("elect"))
                     {
-                        //electPresident(thisPlayerIndex, playerIndex);
+                        game.electPresident(thisPlayerIndex, playerIndex);
                         Console.WriteLine($"ELECT {playerIndex}");
                     }
                 }
