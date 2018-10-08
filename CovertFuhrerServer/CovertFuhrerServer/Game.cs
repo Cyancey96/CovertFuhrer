@@ -216,13 +216,9 @@ namespace CovertFuhrerServer
                 Client.SendMessageToAllClients(message);
 
                 populatePolicies();
-                if (liberalPolicyCount == 5)
+                if (liberalPolicyCount == 5 || facistPolicyCount == 6)
                 {
-                    //todo liberal win
-                }
-                else if (facistPolicyCount == 6)
-                {
-                    //todo facist win
+                    finishGame();
                 }
                 if (facistPolicyCount > prevFacistPolicyCount)
                 {
