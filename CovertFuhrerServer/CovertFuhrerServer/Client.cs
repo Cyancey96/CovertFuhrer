@@ -111,7 +111,7 @@ namespace CovertFuhrerServer
                         {
                             if (Int32.Parse(tokens[1]) < 3)
                             {
-                                //pick(thisPlayerIndex, tokens[1])
+                                game.pickPolicy(thisPlayerIndex, tokens[1]);
                                 Console.WriteLine($"PICK {tokens[1]}");
                             }
                             else
@@ -123,12 +123,12 @@ namespace CovertFuhrerServer
                     }
                     else if (tokens[0].ToLower().Equals("kill"))
                     {
-                        //kill(thisPlayerIndex, playerIndex);
+                        game.kill(thisPlayerIndex, playerIndex);
                         Console.WriteLine($"KILL {playerIndex}");
                     }
                     else if (tokens[0].ToLower().Equals("nominate"))
                     {
-                        //nominateChancellor(thisPlayerIndex, playerIndex);
+                        game.nominateChancellor(thisPlayerIndex, playerIndex);
                         Console.WriteLine($"NOMINATE {playerIndex}");
                     }
                     else if (tokens[0].ToLower().Equals("investigate"))
