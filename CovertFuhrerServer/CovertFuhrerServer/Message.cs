@@ -50,7 +50,7 @@ namespace CovertFuhrerServer
 
         public static string nominateChancellor(PlayerObject president, PlayerObject chancellor)
         {
-            return "" + president.name + "has nominated " + chancellor.name + " to be chancellor.\nVote by typing \"vote yes\" or \"vote no\".";
+            return "" + president.name + " has nominated " + chancellor.name + " to be chancellor.\nVote by typing \"vote yes\" or \"vote no\".";
         }
 
         public static string chancellorInstructions(Policy p1, Policy p2)
@@ -72,12 +72,12 @@ namespace CovertFuhrerServer
 
         public static string votePassed(PlayerObject chancellor)
         {
-            return "" + chancellor.name + "has become the chancellor!";
+            return "" + chancellor.name + " has become the chancellor!";
         }
 
         public static string voteFailed(PlayerObject chancellor)
         {
-            return "" + chancellor.name + "has failed to become the chancellor.";
+            return "" + chancellor.name + " has failed to become the chancellor.";
         }
 
         public static string presidentDiscard(PlayerObject president)
@@ -102,6 +102,10 @@ namespace CovertFuhrerServer
 
         public static string investigatePlayerAfterPrivate(PlayerObject player)
         {
+            if (player.role.Equals(Role.Fuhrer))
+            {
+                return "" + "You know that " + player.name + " is a Facist!";
+            }
             return "" + "You know that " + player.name + " is a " + player.role + "!";
         }
 
@@ -158,6 +162,11 @@ namespace CovertFuhrerServer
         public static string presidentNominate(PlayerObject president)
         {
             return $"{president.name} is nominating a chancellor.";
+        }
+
+        public static string teammate(PlayerObject player)
+        {
+            return $"You are on a team with {player.name}, who is a {player.role}";
         }
     }
 }

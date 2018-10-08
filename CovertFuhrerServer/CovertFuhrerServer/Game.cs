@@ -30,6 +30,14 @@ namespace CovertFuhrerServer
 
         private int specialPreviousPresident { get; set; }
 
+        private bool fuhrerElected { get; set; }
+
+        private bool fuhrerKilled { get; set; }
+
+        private int facistPlayer { get; set; }
+
+        private int fuhrerPlayer { get; set; }
+
         private List<Policy> top3Policies;
 
         static Random random = new Random();
@@ -43,15 +51,26 @@ namespace CovertFuhrerServer
             currentPresident = -1;
             currentChancellor = -1;
             nominatedChancellor = -1;
+            facistPlayer = -1;
+            fuhrerPlayer = -1;
             top3Policies = new List<Policy>();
             populatePolicies();
             specialPreviousPresident = -1;
             specialPresident = false;
+            fuhrerElected = false;
+            fuhrerKilled = false;
         }
 
         public void start()
         {
             Client.SendMessageToAllClients(Message.gameStart());
+            assignRoles();
+            foreach (var client in clients)
+            {
+                client.SendMessage(Message.assignRole(client.player.role));
+            }
+            clients[facistPlayer].SendMessage(Message.teammate(clients[fuhrerPlayer].player));
+            clients[fuhrerPlayer].SendMessage(Message.teammate(clients[facistPlayer].player));
             currentPresident = pickRandomPresident();
         }
 
@@ -133,6 +152,11 @@ namespace CovertFuhrerServer
                 {
                     if (yesVotes > noVotes)
                     {
+                        if (clients[nominatedChancellor].player.role.Equals(Role.Fuhrer) && facistPolicyCount >= 3)
+                        {
+                            fuhrerElected = true;
+                            finishGame();
+                        }
                         currentChancellor = nominatedChancellor;
                         Client.SendMessageToAllClients(Message.votePassed(clients[currentChancellor].player));
                         Client.SendMessageToAllClients(Message.presidentDiscard(clients[currentPresident].player));
@@ -244,6 +268,7 @@ namespace CovertFuhrerServer
                 else
                 {
                     state = TurnState.rotatePresident;
+                    rotatePresident();
                 }
             }
         }
@@ -255,8 +280,16 @@ namespace CovertFuhrerServer
                 clients[playerIndex].player.isAlive = false;
                 string message = Message.executePlayerAfter(clients[thisPlayerIndex].player, clients[playerIndex].player);
                 Client.SendMessageToAllClients(message);
-                state = TurnState.rotatePresident;
-                rotatePresident();
+                if (playerIndex == fuhrerPlayer)
+                {
+                    fuhrerKilled = true;
+                    finishGame();
+                }
+                else
+                {
+                    state = TurnState.rotatePresident;
+                    rotatePresident();
+                }
             }
 
         }
@@ -310,7 +343,29 @@ namespace CovertFuhrerServer
         public void finishGame()
         {
             StringBuilder finalMessage = new StringBuilder();
-            if (liberalPolicyCount == 5)
+            if (fuhrerKilled)
+            {
+                finalMessage.Append("The Fuhrer was killed.  Liberals win!  Winning Players:");
+                foreach (var client in clients)
+                {
+                    if (client.player.role.Equals(Role.Liberal))
+                    {
+                        finalMessage.Append($"\n{client.player.name}");
+                    }
+                }
+            }
+            else if (fuhrerElected)
+            {
+                finalMessage.Append("The Fuhrer was elected chancellor.  Facists win!  Winning Players:");
+                foreach (var client in clients)
+                {
+                    if (client.player.role.Equals(Role.Facist) || client.player.role.Equals(Role.Fuhrer))
+                    {
+                        finalMessage.Append($"\n{client.player.name}");
+                    }
+                }
+            }
+            else if (liberalPolicyCount == 5)
             {
                 finalMessage.Append("Liberals win!  Winning Players:");
                 foreach (var client in clients)
@@ -333,6 +388,24 @@ namespace CovertFuhrerServer
                 }
             }
             Client.SendMessageToAllClients(finalMessage.ToString());
+            while (true)
+            {
+                //DO NOTHING, game has ended.
+            }
+        }
+
+        private void assignRoles()
+        {
+            int facist = random.Next(clients.Count);
+            int fuhrer = random.Next(clients.Count);
+            while (fuhrer == facist)
+            {
+                fuhrer = random.Next(clients.Count);
+            }
+            facistPlayer = facist;
+            fuhrerPlayer = fuhrer;
+            clients[facist].player.role = Role.Facist;
+            clients[fuhrer].player.role = Role.Fuhrer;
         }
     }
 }

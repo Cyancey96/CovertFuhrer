@@ -18,7 +18,7 @@ namespace CovertFuhrerServer
         {
             using (var packet = new NetPacket())
             {
-                packet.Write("Welcome " + player.name + "!");
+                packet.Write("# Welcome " + player.name + "!");
 
                 Send(packet);
             }
@@ -28,7 +28,7 @@ namespace CovertFuhrerServer
         {
             using (var packet = new NetPacket())
             {
-                packet.Write(message);
+                packet.Write($"# {message}");
 
                 Send(packet);
             }
@@ -38,7 +38,7 @@ namespace CovertFuhrerServer
         {
             using (var packet = new NetPacket())
             {
-                packet.Write(message);
+                packet.Write($"# {message}");
                 foreach (var client in clients)
                 {
                     client.Send(packet);
@@ -85,7 +85,7 @@ namespace CovertFuhrerServer
                     String[] tokens = value.Split(" ");
                     int playerIndex = handleSecondToken(tokens[1]);
                     int thisPlayerIndex = getThisPlayerIndex();
-                    if (!clients[playerIndex].player.isAlive)
+                    if (playerIndex >= 0 && !clients[playerIndex].player.isAlive)
                     {
                         SendMessage("The selected player is dead.  Please choose a different player.");
                     }
@@ -127,23 +127,38 @@ namespace CovertFuhrerServer
                     }
                     else if (tokens[0].ToLower().Equals("kill"))
                     {
-                        game.kill(thisPlayerIndex, playerIndex);
-                        Console.WriteLine($"KILL {playerIndex}");
+                        if (thisPlayerIndex != playerIndex)
+                        {
+                            game.kill(thisPlayerIndex, playerIndex);
+                            Console.WriteLine($"KILL {playerIndex}");
+                        }
+                        //DO NOTHING
                     }
                     else if (tokens[0].ToLower().Equals("nominate"))
                     {
-                        game.nominateChancellor(thisPlayerIndex, playerIndex);
-                        Console.WriteLine($"NOMINATE {playerIndex}");
+                        if (thisPlayerIndex != playerIndex)
+                        {
+                            game.nominateChancellor(thisPlayerIndex, playerIndex);
+                            Console.WriteLine($"NOMINATE {playerIndex}");
+                        }
+                        //DO NOTHING
                     }
                     else if (tokens[0].ToLower().Equals("investigate"))
                     {
-                        game.investigate(thisPlayerIndex, playerIndex);
-                        Console.WriteLine($"INVESTIGATE {playerIndex}");
+                        if (thisPlayerIndex != playerIndex)
+                        {
+                            game.investigate(thisPlayerIndex, playerIndex);
+                            Console.WriteLine($"INVESTIGATE {playerIndex}");
+                        }
+                        //DO NOTHING
                     }
                     else if (tokens[0].ToLower().Equals("elect"))
                     {
-                        game.electPresident(thisPlayerIndex, playerIndex);
-                        Console.WriteLine($"ELECT {playerIndex}");
+                        if (thisPlayerIndex != playerIndex)
+                        {
+                            game.electPresident(thisPlayerIndex, playerIndex);
+                            Console.WriteLine($"ELECT {playerIndex}");
+                        }
                     }
                 }
             }
