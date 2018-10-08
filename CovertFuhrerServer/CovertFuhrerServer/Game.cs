@@ -26,6 +26,10 @@ namespace CovertFuhrerServer
 
         private int noVotes { get; set; }
 
+        private bool specialPresident { get; set; }
+
+        private int specialPreviousPresident { get; set; }
+
         private List<Policy> top3Policies;
 
         static Random random = new Random();
@@ -41,6 +45,8 @@ namespace CovertFuhrerServer
             nominatedChancellor = -1;
             top3Policies = new List<Policy>();
             populatePolicies();
+            specialPreviousPresident = -1;
+            specialPresident = false;
         }
 
         public void start()
@@ -63,13 +69,41 @@ namespace CovertFuhrerServer
         //the presidency moves to the next player in line
         public void rotatePresident()
         {
-            if (currentPresident != clients.Count - 1)
+            bool presidentChosen = false;
+            while (!presidentChosen)
             {
-                currentPresident += 1;
-            }
-            else
-            {
-                currentPresident = 0;
+                if (specialPresident)
+                {
+                    if (specialPreviousPresident != clients.Count - 1)
+                    {
+                        currentPresident = specialPreviousPresident + 1;
+                    }
+                    else
+                    {
+                        currentPresident = 0;
+                    }
+                    specialPresident = false;
+                    specialPreviousPresident = -1;
+                    if (clients[currentPresident].player.isAlive)
+                    {
+                        presidentChosen = true;
+                    }
+                }
+                else
+                {
+                    if (currentPresident != clients.Count - 1)
+                    {
+                        currentPresident += 1;
+                    }
+                    else
+                    {
+                        currentPresident = 0;
+                    }
+                    if (clients[currentPresident].player.isAlive)
+                    {
+                        presidentChosen = true;
+                    }
+                }
             }
             Client.SendMessageToAllClients(Message.becomePresident(clients[currentPresident].player));
             state = TurnState.nominateChancellor;
@@ -95,7 +129,7 @@ namespace CovertFuhrerServer
                     clients[playerIndex].player.hasVoted = true;
                     Client.SendMessageToAllClients(Message.voteRecieved(clients[playerIndex].player, false));
                 }
-                if (totalVotes == clients.Count)
+                if (totalVotes == getAlivePlayerCount())
                 {
                     if (yesVotes > noVotes)
                     {
@@ -125,7 +159,7 @@ namespace CovertFuhrerServer
 
         public void discardPolicy(int playerIndex, int policyIndex)
         {
-            if (state.Equals(TurnState.presidentDiscard))
+            if (state.Equals(TurnState.presidentDiscard) && playerIndex == currentPresident)
             {
                 policyIndex--;
                 top3Policies.RemoveAt(policyIndex);
@@ -153,7 +187,7 @@ namespace CovertFuhrerServer
 
         public void nominateChancellor(int currentPresident, int index)
         {
-            if (state.Equals(TurnState.nominateChancellor))
+            if (state.Equals(TurnState.nominateChancellor) && currentPresident == this.currentPresident)
             {
                 nominatedChancellor = index;
                 string message = Message.nominateChancellor(clients[currentPresident].player, clients[index].player);
@@ -165,7 +199,8 @@ namespace CovertFuhrerServer
 
         public void pickPolicy(int thisPlayerIndex, string selectedPolicy)
         {
-            if (state.Equals(TurnState.chancellorPick))
+            int prevFacistPolicyCount = facistPolicyCount;
+            if (state.Equals(TurnState.chancellorPick) && thisPlayerIndex == currentChancellor)
             {
                 int convertedToken = Int32.Parse(selectedPolicy) - 1;
                 if (top3Policies[convertedToken] == Policy.Liberal)
@@ -181,23 +216,123 @@ namespace CovertFuhrerServer
                 Client.SendMessageToAllClients(message);
 
                 populatePolicies();
-
-                if (facistPolicyCount >= 3)
+                if (liberalPolicyCount == 5 || facistPolicyCount == 6)
+                {
+                    finishGame();
+                }
+                if (facistPolicyCount > prevFacistPolicyCount)
                 {
                     state = TurnState.facistAction;
+                    switch (facistPolicyCount)
+                    {
+                        case 1:
+                        case 2:
+                            Client.SendMessageToAllClients(Message.investigatePlayerBefore(clients[currentPresident].player));
+                            clients[currentPresident].SendMessage(Message.investigateInstructions());
+                            break;
+                        case 3:
+                            Client.SendMessageToAllClients(Message.specialElectionBefore(clients[currentPresident].player));
+                            clients[currentPresident].SendMessage(Message.electInstructions());
+                            break;
+                        case 4:
+                        case 5:
+                            Client.SendMessageToAllClients(Message.executePlayerBefore(clients[currentPresident].player));
+                            clients[currentPresident].SendMessage(Message.executeInstructions());
+                            break;
+                    }
+                }
+                else
+                {
+                    state = TurnState.rotatePresident;
                 }
             }
         }
 
         public void kill(int thisPlayerIndex, int playerIndex)
         {
-            if (state.Equals(TurnState.facistAction))
+            if (state.Equals(TurnState.facistAction) && (facistPolicyCount == 4 || facistPolicyCount == 5) && thisPlayerIndex == currentPresident)
             {
                 clients[playerIndex].player.isAlive = false;
                 string message = Message.executePlayerAfter(clients[thisPlayerIndex].player, clients[playerIndex].player);
                 Client.SendMessageToAllClients(message);
+                state = TurnState.rotatePresident;
+                rotatePresident();
             }
 
+        }
+
+        public void electPresident(int oldPresident, int newPresident)
+        {
+            if (state.Equals(TurnState.facistAction) && facistPolicyCount == 3 && oldPresident == currentPresident)
+            {
+                specialPresident = true;
+                specialPreviousPresident = oldPresident;
+                currentPresident = newPresident;
+                Client.SendMessageToAllClients(Message.specialElectionAfter(clients[oldPresident].player,
+                    clients[newPresident].player));
+                state = TurnState.nominateChancellor;
+                Client.SendMessageToAllClients(Message.presidentNominate(clients[currentPresident].player));
+                clients[currentPresident].SendMessage(Message.presidentInstructionsNominate());
+            }
+        }
+
+        private int getAlivePlayerCount()
+        {
+            int count = 0;
+            foreach (var client in clients)
+            {
+                if (client.player.isAlive)
+                {
+                    count++;
+                }
+            }
+            return count;
+        }
+
+        public void investigate(int thisPlayerIndex, int playerIndex)
+        {
+            if (state.Equals(TurnState.facistAction) && (facistPolicyCount == 1 || facistPolicyCount == 2) && thisPlayerIndex == currentPresident)
+            {
+                string privateMessage = Message.investigatePlayerAfterPrivate(clients[playerIndex].player);
+                //private message to the president indicating the investigated's role
+
+                clients[thisPlayerIndex].SendMessage(privateMessage);
+
+                string publicMessage = Message.investigatePlayerAfterPublic(clients[thisPlayerIndex].player, clients[playerIndex].player);
+                //public message to all players of the presidents knowledge post investigation
+
+                Client.SendMessageToAllClients(publicMessage);
+            }
+            state = TurnState.rotatePresident;
+            rotatePresident();
+        }
+
+        public void finishGame()
+        {
+            StringBuilder finalMessage = new StringBuilder();
+            if (liberalPolicyCount == 5)
+            {
+                finalMessage.Append("Liberals win!  Winning Players:");
+                foreach (var client in clients)
+                {
+                    if (client.player.role.Equals(Role.Liberal))
+                    {
+                        finalMessage.Append($"\n{client.player.name}");
+                    }
+                }
+            }
+            else
+            {
+                finalMessage.Append("Facists win!  Winning Players:");
+                foreach (var client in clients)
+                {
+                    if (client.player.role.Equals(Role.Facist) || client.player.role.Equals(Role.Fuhrer))
+                    {
+                        finalMessage.Append($"\n{client.player.name}");
+                    }
+                }
+            }
+            Client.SendMessageToAllClients(finalMessage.ToString());
         }
     }
 }
