@@ -12,6 +12,8 @@ namespace CovertFuhrerServer
 
         private int liberalPolicyCount { get; set; }
 
+        private int nominatedChancellor { get; set; }
+
         private int facistPolicyCount { get; set; }
 
         private int currentPresident { get; set; }
@@ -36,6 +38,7 @@ namespace CovertFuhrerServer
             facistPolicyCount = 0;
             currentPresident = -1;
             currentChancellor = -1;
+            nominatedChancellor = -1;
             top3Policies = new List<Policy>();
             populatePolicies();
         }
@@ -52,8 +55,8 @@ namespace CovertFuhrerServer
             int index = random.Next(clients.Count);
             Client.SendMessageToAllClients(Message.becomePresident(clients[index].player));
             state = TurnState.nominateChancellor;
-            Client.SendMessageToAllClients(Message.presidentNominate(clients[currentPresident].player));
-            clients[currentPresident].SendMessage(Message.presidentInstructionsNominate());
+            Client.SendMessageToAllClients(Message.presidentNominate(clients[index].player));
+            clients[index].SendMessage(Message.presidentInstructionsNominate());
             return index;
         }
 
@@ -96,6 +99,7 @@ namespace CovertFuhrerServer
                 {
                     if (yesVotes > noVotes)
                     {
+                        currentChancellor = nominatedChancellor;
                         Client.SendMessageToAllClients(Message.votePassed(clients[currentChancellor].player));
                         Client.SendMessageToAllClients(Message.presidentDiscard(clients[currentPresident].player));
                         clients[currentPresident].SendMessage(Message.presidentInstructionsDiscard(top3Policies[0], top3Policies[1], top3Policies[2]));
@@ -103,8 +107,9 @@ namespace CovertFuhrerServer
                     }
                     else
                     {
-                        Client.SendMessageToAllClients(Message.voteFailed(clients[currentChancellor].player));
+                        Client.SendMessageToAllClients(Message.voteFailed(clients[nominatedChancellor].player));
                         state = TurnState.rotatePresident;
+                        nominatedChancellor = -1;
                         rotatePresident();
                     }
                     totalVotes = 0;
@@ -145,6 +150,54 @@ namespace CovertFuhrerServer
                 }
             }
         }
+
+        public void nominateChancellor(int currentPresident, int index)
+        {
+            if (state.Equals(TurnState.nominateChancellor))
+            {
+                nominatedChancellor = index;
+                string message = Message.nominateChancellor(clients[currentPresident].player, clients[index].player);
+                Client.SendMessageToAllClients(message);
+                state = TurnState.voteChancellor;
+            }
+
+        }
+
+        public void pickPolicy(int thisPlayerIndex, string selectedPolicy)
+        {
+            if (state.Equals(TurnState.chancellorPick))
+            {
+                int convertedToken = Int32.Parse(selectedPolicy) - 1;
+                if (top3Policies[convertedToken] == Policy.Liberal)
+                {
+                    liberalPolicyCount++;
+                }
+                else
+                {
+                    facistPolicyCount++;
+                }
+                string message = Message.chancellorSelectPolicyAfter(clients[thisPlayerIndex].player, top3Policies[convertedToken], liberalPolicyCount, facistPolicyCount);
+
+                Client.SendMessageToAllClients(message);
+
+                populatePolicies();
+
+                if (facistPolicyCount >= 3)
+                {
+                    state = TurnState.facistAction;
+                }
+            }
+        }
+
+        public void kill(int thisPlayerIndex, int playerIndex)
+        {
+            if (state.Equals(TurnState.facistAction))
+            {
+                clients[playerIndex].player.isAlive = false;
+                string message = Message.executePlayerAfter(clients[thisPlayerIndex].player, clients[playerIndex].player);
+                Client.SendMessageToAllClients(message);
+            }
+
+        }
     }
 }
-
