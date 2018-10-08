@@ -17,7 +17,9 @@ namespace CovertFuhrerServer
         public PlayerObject(string playerName)
         {
             name = playerName;
+            role = Role.Liberal;
             hasVoted = false;
+            isAlive = true;
         }
 
         public PlayerObject(string playerName, Role playerRole)
@@ -25,6 +27,7 @@ namespace CovertFuhrerServer
             name = playerName;
             role = playerRole;
             hasVoted = false;
+            isAlive = true;
         }
     }
 }
