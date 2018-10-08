@@ -137,7 +137,7 @@ namespace CovertFuhrerServer
                     }
                     else if (tokens[0].ToLower().Equals("investigate"))
                     {
-                        //investigate(thisPlayerIndex, playerIndex);
+                        game.investigate(thisPlayerIndex, playerIndex);
                         Console.WriteLine($"INVESTIGATE {playerIndex}");
                     }
                     else if (tokens[0].ToLower().Equals("elect"))
